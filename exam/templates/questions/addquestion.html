@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Question</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: #0d6efd;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 15px 15px 0 0 !important;
+        }
+
+        .btn-save {
+            width: 150px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                OAEP Admin Panel
+            </a>
+        </div>
+    </nav>
+
+    <!-- Add Question Form -->
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <div class="card">
+                    <div class="card-header">
+                        Add New Questions
+                    </div>
+
+                    <div class="card-body p-4">
+                        {% if msg %}
+                        <div class="alert alert-success">
+                            {{ msg }}
+                        </div>
+                        {% endif %}
+
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Question ID</label>
+                                <input type="number" class="form-control" name="qid" placeholder="Enter Question ID">
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Subject Name</label>
+                                <input type="text" class="form-control" name="subject" placeholder="Enter Subject Name">
+                            </div>
+
+                            <!-- Question -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Question</label>
+                                <textarea class="form-control" name="question" rows="4"
+                                    placeholder="Enter Question"></textarea>
+                            </div>
+
+                            <!-- Options -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Option A</label>
+                                <input type="text" name="opt1" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Option B</label>
+                                <input type="text" name="opt2" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Option C</label>
+                                <input type="text" name="opt3" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Option D</label>
+                                <input type="text" name="opt4" class="form-control">
+                            </div>
+
+                            <!-- Correct Answer -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Correct Answer</label>
+                                <input type="text" class="form-control" name="rightans"
+                                    placeholder="Enter Correct Answer">
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="text-center mt-4">
+                                <button type="submit" formaction="/addquestionpage/" class="btn btn-primary btn-save">
+                                    Save Question
+                                </button>
+
+                                <button type="reset" class="btn btn-secondary btn-save">
+                                    Reset
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
