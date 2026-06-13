@@ -88,6 +88,8 @@ def DeleteQuestion(request):
     return render(request, 'questions/deletequestion.html', {'msg':'Question Deleted Successfully !!!'})
 
 def QuestionCurdPage(request):
+    if request.session.get('role') != 'admin':
+        return render(request, 'student/login.html', {'msg': 'Access Denied !!!'})
     return render(request, 'questions/questioncurd.html')
 
 def ShowAllQuestion(request):
@@ -128,18 +130,24 @@ def StudentLogin(request):
     if request.method == 'POST':
         uname = request.POST.get('username')
         psw = request.POST.get('password')
-        
-        userdb = Stud_Info.objects.get(username=uname)
-        
-        if (userdb.password != psw):
-            return render(request, 'students/login.html', {'msg':'Invalid Username or Password !!!'})
-    
-    request.session['username'] = uname
-    request.session['answer'] = {}
-    request.session['score'] = 0
-    request.session['qno'] = 0
-    subject = Question.objects.values('sub_name').distinct()
-    return render(request, 'students/subject.html', {'subject': subject})
+        userdb = Stud_Info.objects.filter(username=uname).first()
+        if userdb is None:
+            return render(request, 'students/login.html', {'msg': 'Username Does Not Exist !!!'})
+
+        if userdb.password != psw:
+            return render(request, 'students/login.html', {'msg': 'Invalid Password !!!'})
+
+        request.session['username'] = uname
+        request.session['role'] = userdb.role
+        request.session['answer'] = {}
+        request.session['score'] = 0
+        request.session['qno'] = 0
+
+        if userdb.role == 'admin':
+            return render(request, 'admin/admindashboard.html')
+        subject = Question.objects.values('sub_name').distinct()
+        return render(request, 'students/subject.html', {'subject': subject})
+    return render(request, 'students/login.html')
     
 def DeleteStudentPage(request):
     return render(request, 'students/deletestudent.html')
@@ -165,10 +173,12 @@ def UpdateStudent(request):
         email = request.POST.get('email')
         mobno = request.POST.get('mobile_no')
         
-        Stud_Info.objects.filter(username=uname)
+        userdb = Stud_Info.objects.filter(username=uname)
         
-        userdb = Stud_Info.objects.update(
-            username = uname,
+        if not userdb.exists():
+            return render(request, 'student/updatestudent.html', {'msg': 'Username does not exists !!!'})
+        
+        userdb.update(
             password = psw,
             email = email,
             mobile_no = mobno
@@ -200,80 +210,193 @@ def StudentCurdPage(request):
 def HomePage(request):
     return render(request, 'home.html')
 
+# def StartExam(request):
+#     if request.session.get('role') != 'student':
+#         return render(request, 'student/login.html', {'msg': 'Access Denied !!!'})
+#     if request.method == 'POST':
+#         subject = request.POST.get('subject')
+#         request.session['subject'] = subject
+        
+#         question = Question.objects.filter(sub_name=subject).values()
+        
+#         allquestion = list(question)
+#         request.session['allquestion'] = allquestion
+        
+#         return render(request, 'starttest.html', {'question': allquestion[0]})
+
 def StartExam(request):
+
     if request.method == 'POST':
+
         subject = request.POST.get('subject')
+
         request.session['subject'] = subject
-        
-        question = Question.objects.filter(sub_name=subject).values()
-        
-        allquestion = list(question)
+
+        allquestion = list(
+            Question.objects.filter(
+                sub_name=subject
+            ).values()
+        )
+
         request.session['allquestion'] = allquestion
-        
-        return render(request, 'starttest.html', {'question': allquestion[0]})
+        request.session['qno'] = 0
+        request.session['answer'] = {}
+
+        return render(
+            request,
+            'starttest.html',
+            {
+                'question': allquestion[0],
+                'qno': 0,
+                'totalquestion': len(allquestion)
+            }
+        )
     
 def NextQuestion(request):
+
     allquestion = request.session['allquestion']
     questionindex = request.session['qno']
-    
+
     if 'op' in request.POST:
+
         answer = request.session['answer']
-        answer[request.session['qno']] = [request.POST['qno'], request.POST['que_name'], request.POST.get('op'), request.POST.get('answer')]
-        
-    try:
-        if questionindex < len(allquestion):
-            request.session['qno'] += 1
-            questionindex = request.session['qno']
-            question = allquestion[questionindex]
-            return render(request, 'starttest.html', {'question': question})
-        else:
-            return render(request, 'starttest.html', {'question': question})
-        
-    except:
-        return render(request, 'starttest.html', {'msg': 'Go to previous !!!', 'question': allquestion[-1]})
-    
-def PreviousQuestion(request):
-    allquestion = request.session['allquestion']
-    questionindex = request.session['qno']
-    
-    if 'op' in request.POST:
-        answer = request.session['answer']
-        answer[request.session['qno']] = [request.POST['qno'], request.POST['que_name'], request.POST['op'], request.POST['answer']]
-        
-    try:
-        if questionindex > 0:
-            request.session['qno'] -=1
-            questionindex = request.session['qno']
-            question = allquestion[questionindex]
-            return render(request, 'starttest.html', {'question' : question})
-        else:
-            return render(request, 'starttest.html', {'question':question})
-    except:
-            return render(request, 'starttest.html', {'msg':'Go to next'})
-        
-def EndTest(request):
-    if 'op' in request.POST:
-        answer = request.session['answer']
-        answer[request.POST['qno']] = [request.POST['qno'], request.POST['que_name'], request.POST['op'], request.POST['answer']]
-        
-    response = request.session['answer'].values()
-    
-    for res in response:
-        if res[2] == res[3]:
-            request.session['score'] +=1
-    
-    finalscore = request.session['score']
-    uname = request.session['username']
-    userdb = Stud_Info.objects.get(username=uname)
-    subject = request.session['subject']
-    
-    Result.objects.create(
-        username = userdb,
-        subject = subject,
-        score = finalscore
+
+        answer[str(questionindex)] = [
+            request.POST.get('qno'),
+            request.POST.get('que_name'),
+            request.POST.get('op'),
+            request.POST.get('answer')
+        ]
+
+        request.session['answer'] = answer
+
+    if questionindex < len(allquestion) - 1:
+
+        request.session['qno'] += 1
+
+        questionindex = request.session['qno']
+
+        question = allquestion[questionindex]
+
+        return render(
+            request,
+            'starttest.html',
+            {
+                'question': question,
+                'qno': request.session['qno'],
+                'totalquestion': len(allquestion)
+            }
+        )
+
+    question = allquestion[-1]
+
+    return render(
+        request,
+        'starttest.html',
+        {
+            'question': question,
+            'qno': request.session['qno'],
+            'totalquestion': len(allquestion)
+        }
     )
     
-    return render(request, 'result/scorecard.html', {'response': response, 'finalscore': finalscore})
+def PreviousQuestion(request):
+
+    allquestion = request.session['allquestion']
+    questionindex = request.session['qno']
+
+    if 'op' in request.POST:
+
+        answer = request.session['answer']
+
+        answer[str(questionindex)] = [
+            request.POST.get('qno'),
+            request.POST.get('que_name'),
+            request.POST.get('op'),
+            request.POST.get('answer')
+        ]
+
+        request.session['answer'] = answer
+
+    if questionindex > 0:
+
+        request.session['qno'] -= 1
+
+        questionindex = request.session['qno']
+
+        question = allquestion[questionindex]
+
+        return render(
+            request,
+            'starttest.html',
+            {
+                'question': question,
+                'qno': request.session['qno'],
+                'totalquestion': len(allquestion)
+            }
+        )
+
+    question = allquestion[0]
+
+    return render(
+        request,
+        'starttest.html',
+        {
+            'question': question,
+            'qno': 0,
+            'totalquestion': len(allquestion)
+        }
+    )
+        
+def EndTest(request):
+
+    if 'op' in request.POST:
+
+        answer = request.session['answer']
+
+        answer[str(request.session['qno'])] = [
+            request.POST.get('qno'),
+            request.POST.get('que_name'),
+            request.POST.get('op'),
+            request.POST.get('answer')
+        ]
+
+        request.session['answer'] = answer
+
+    response = list(request.session['answer'].values())
+
+    score = 0
+
+    for res in response:
+
+        if res[2] == res[3]:
+
+            score += 1
+
+    finalscore = score
+
+    uname = request.session['username']
+
+    userdb = Stud_Info.objects.get(
+        username=uname
+    )
+
+    subject = request.session['subject']
+
+    Result.objects.create(
+        username=userdb,
+        subject=subject,
+        score=finalscore
+    )
+
+    return render(
+        request,
+        'result/scorecard.html',
+        {
+            'response': response,
+            'finalscore': finalscore
+        }
+    )
 
 def Logout(request):
     logout(request)
@@ -282,6 +405,9 @@ def Logout(request):
 def ShowAllResult(request):
     resultdb = Result.objects.all()
     return render(request, 'result/showallresult.html', {'resultdb': resultdb})
+
+def ModulePage(request):
+    return render(request, 'module.html')
 
 ########################################################################################################################################
 

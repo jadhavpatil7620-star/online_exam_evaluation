@@ -20,6 +20,7 @@ class Stud_Info(models.Model):
     password = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     mobile_no = models.BigIntegerField()
+    role = models.CharField(max_length=20, default='student')
     
     class Meta:
         db_table = 'stud_info'
