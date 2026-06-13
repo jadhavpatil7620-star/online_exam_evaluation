@@ -210,20 +210,6 @@ def StudentCurdPage(request):
 def HomePage(request):
     return render(request, 'home.html')
 
-# def StartExam(request):
-#     if request.session.get('role') != 'student':
-#         return render(request, 'student/login.html', {'msg': 'Access Denied !!!'})
-#     if request.method == 'POST':
-#         subject = request.POST.get('subject')
-#         request.session['subject'] = subject
-        
-#         question = Question.objects.filter(sub_name=subject).values()
-        
-#         allquestion = list(question)
-#         request.session['allquestion'] = allquestion
-        
-#         return render(request, 'starttest.html', {'question': allquestion[0]})
-
 def StartExam(request):
 
     if request.method == 'POST':
