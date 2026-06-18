@@ -36,6 +36,7 @@ urlpatterns = [
     path('logout/', views.Logout),
     path('showallresult/', views.ShowAllResult),
     path('module/', views.ModulePage),
+    path('adminpage/', views.AdminPage),
     
     # API URLS
     path('viewapi/', views.ViewRest),

@@ -149,6 +149,9 @@ def StudentLogin(request):
         return render(request, 'students/subject.html', {'subject': subject})
     return render(request, 'students/login.html')
     
+def AdminPage(request):
+    return render(request, 'admin/admindashboard.html')
+    
 def DeleteStudentPage(request):
     return render(request, 'students/deletestudent.html')
     
