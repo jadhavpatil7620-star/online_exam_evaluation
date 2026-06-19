@@ -107,8 +107,11 @@ DATABASES = {
         'NAME': 'examportal_d69x',
         'USER': 'examportal_d69x_user',
         'PASSWORD': 'QuuLz9tqRqnkAqiTvIqnSOiwJfQZDyAh',
-        'HOST': 'dpg-d8qclgvavr4c7388nkvg-a',
+        'HOST': 'dpg-d8qclgvavr4c7388nkvg-a.virginia-postgres.render.com',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 
