@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -89,14 +90,25 @@ WSGI_APPLICATION = 'online_assessment_evaluation.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'examportal',
+#         'USER':'root',
+#         'PASSWORD':'Gopal@123',
+#         'HOST':'localhost',
+#         'PORT':3306
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'examportal',
-        'USER':'root',
-        'PASSWORD':'Gopal@123',
-        'HOST':'localhost',
-        'PORT':3306
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'examportal_d69x',
+        'USER': 'examportal_d69x_user',
+        'PASSWORD': 'QuuLz9tqRqnkAqiTvIqnSOiwJfQZDyAh',
+        'HOST': 'dpg-d8qclgvavr4c7388nkvg-a',
+        'PORT': '5432',
     }
 }
 
