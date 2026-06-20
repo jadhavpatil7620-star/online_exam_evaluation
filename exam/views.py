@@ -150,7 +150,40 @@ def StudentLogin(request):
     return render(request, 'students/login.html')
     
 def AdminPage(request):
-    return render(request, 'admin/admindashboard.html')
+    context = {
+
+        'total_students': Stud_Info.objects.filter(role='student').count(),
+
+        'total_questions': Question.objects.count(),
+
+        'total_subjects': Question.objects.values(
+            'sub_name'
+        ).distinct().count(),
+
+        'total_results': Result.objects.count(),
+
+        'recent_results': Result.objects.order_by('-id')[:5]
+    }
+
+    return render(
+        request,
+        'admin/admindashboard.html',
+        context
+    )
+
+def SubjectPage(request):
+
+    subjectdb = Question.objects.values(
+        'sub_name'
+    ).distinct()
+
+    return render(
+        request,
+        'subjects/subjectpage.html',
+        {
+            'subjectdb': subjectdb
+        }
+    )
     
 def DeleteStudentPage(request):
     return render(request, 'students/deletestudent.html')
