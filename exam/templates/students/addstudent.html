@@ -1,30 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Registration | OAEP</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
             background: linear-gradient(135deg, #eef2ff, #f8f9fa);
             min-height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: "Segoe UI", sans-serif;
         }
 
         .navbar {
             background: linear-gradient(135deg, #0d6efd, #084298);
-        }
-
-        .main-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0px 12px 30px rgba(0,0,0,0.15);
-            margin-top: 50px;
         }
 
         .left-panel {
@@ -87,191 +80,259 @@
         .alert {
             border-radius: 12px;
         }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .left-panel {
+            min-height: 100%;
+        }
+
+        @media(max-width:768px) {
+
+            .btn-register,
+            .btn-reset {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .left-panel {
+                text-align: center;
+                padding: 30px;
+            }
+
+            .form-panel {
+                padding: 25px;
+            }
+        }
+
+        .left-panel {
+            background: linear-gradient(135deg, #0d6efd, #084298);
+            color: white;
+            padding: 40px;
+            height: 100%;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, .15);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .main-card {
+            background: #fff;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .12);
+            margin-top: 50px;
+        }
+
+        .form-control {
+            height: 55px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            padding-left: 15px;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 15px rgba(13, 110, 253, .2);
+        }
+
+        .footer {
+            background: white;
+            margin-top: 40px;
+            padding: 25px;
+            border-top: 1px solid #e9ecef;
+            color: #6c757d;
+        }
+
+        .footer p {
+            margin: 0;
+        }
     </style>
 </head>
 
 <body>
-
     <nav class="navbar navbar-dark">
         <div class="container">
-            <a class="navbar-brand fw-bold">
-                OAEP Student Portal
-            </a>
+            <a class="navbar-brand fw-bold"> OAEP Student Portal </a>
 
-            <a href="/studentloginpage/" class="btn btn-light">
-                Login
-            </a>
+            <a href="/studentloginpage/" class="btn btn-light"> Login </a>
         </div>
     </nav>
 
     <div class="container">
-
         <div class="main-card">
-
             <div class="row g-0">
 
                 <!-- Left Section -->
-
                 <div class="col-lg-5">
-
                     <div class="left-panel">
+                        <div class="text-center mb-4">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" width="120">
+                        </div>
 
                         <h2>🎓 Welcome to OAEP</h2>
 
-                        <p>
-                            Create your account and start taking online examinations.
-                        </p>
+                        <p>Join India's Smart Online Examination Platform</p>
 
                         <hr>
 
-                        <ul>
-                            <li>✔ Secure Student Registration</li>
-                            <li>✔ Subject Wise Online Exams</li>
-                            <li>✔ Instant Result Generation</li>
-                            <li>✔ Performance Tracking</li>
-                            <li>✔ Responsive User Interface</li>
-                        </ul>
+                        <div class="feature-box">
+                            ✔ Secure Student Registration
+                        </div>
+
+                        <div class="feature-box">
+                            ✔ Subject Wise Online Exams
+                        </div>
+
+                        <div class="feature-box">
+                            ✔ Instant Result Generation
+                        </div>
+
+                        <div class="feature-box">
+                            ✔ Performance Analytics
+                        </div>
+
+                        <div class="feature-box">
+                            ✔ Mobile Friendly Interface
+                        </div>
+
+                        <div class="mt-4">
+                            <h5>📈 Trusted by Students</h5>
+                            <small>Learn • Practice • Evaluate</small>
+                        </div>
 
                     </div>
-
                 </div>
 
                 <!-- Right Section -->
-
                 <div class="col-lg-7">
-
                     <div class="form-panel">
-
                         <h2 class="form-title">
-                            Student Registration
+                            Create Your Account
                         </h2>
+
+                        <p class="text-muted text-center mb-4">
+                            Register to access online examinations and results
+                        </p>
 
                         {% if msg %}
 
-                        <div class="alert alert-info text-center">
-                            {{msg}}
-                        </div>
+                        <div class="alert alert-info text-center">{{msg}}</div>
 
                         {% endif %}
 
                         <form method="post" action="/studentregister/">
-
                             {% csrf_token %}
 
                             <div class="row">
-
                                 <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold"> Username </label>
 
-                                    <label class="form-label fw-bold">
-                                        Username
-                                    </label>
-
-                                    <input type="text"
-                                           name="username"
-                                           class="form-control"
-                                           placeholder="Enter Username"
-                                           required>
-
+                                    <input type="text" name="username" class="form-control" placeholder="Enter Username"
+                                        required />
                                 </div>
 
                                 <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold"> Email Address </label>
 
-                                    <label class="form-label fw-bold">
-                                        Email Address
-                                    </label>
-
-                                    <input type="email"
-                                           name="email"
-                                           class="form-control"
-                                           placeholder="Enter Email"
-                                           required>
-
+                                    <input type="email" name="email" class="form-control" placeholder="Enter Email"
+                                        required />
                                 </div>
 
                                 <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold"> Mobile Number </label>
 
-                                    <label class="form-label fw-bold">
-                                        Mobile Number
-                                    </label>
-
-                                    <input type="text"
-                                           name="mobile_no"
-                                           class="form-control"
-                                           placeholder="Enter Mobile Number"
-                                           required>
-
+                                    <input type="text" name="mobile_no" class="form-control"
+                                        placeholder="Enter Mobile Number" required />
                                 </div>
 
                                 <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold"> Password </label>
 
-                                    <label class="form-label fw-bold">
-                                        Password
-                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Enter Password" required />
 
-                                    <input type="password"
-                                           name="password"
-                                           class="form-control"
-                                           placeholder="Enter Password"
-                                           required>
-
+                                        <span class="input-group-text password-toggle" onclick="togglePassword()">
+                                            👁
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-
-                                    <label class="form-label fw-bold">
-                                        Confirm Password
-                                    </label>
-
-                                    <input type="password"
-                                           name="cfpassword"
-                                           class="form-control"
-                                           placeholder="Confirm Password"
-                                           required>
-
+                                    <label class="form-label fw-bold"> Confirm Password </label>
+                                    <div class="input-group">
+                                        <input type="password" name="cfpassword" class="form-control" placeholder="Confirm Password" required />
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" required />
 
+                                <label class="form-check-label">
+                                    I agree to the Terms & Conditions
+                                </label>
                             </div>
 
                             <div class="text-center mt-4">
-
-                                <button type="submit"
-                                        class="btn btn-primary btn-register">
+                                <button type="submit" class="btn btn-primary btn-register">
                                     Register
                                 </button>
 
-                                <button type="reset"
-                                        class="btn btn-secondary btn-reset">
+                                <button type="reset" class="btn btn-secondary btn-reset">
                                     Reset
                                 </button>
-
                             </div>
-
                         </form>
 
                         <div class="text-center mt-4">
-
                             <p>
                                 Already have an account?
 
-                                <a href="/"
-                                   class="login-link">
-                                    Login Here
-                                </a>
-
+                                <a href="/" class="login-link"> Login Here </a>
                             </p>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container text-center">
+
+            <h6 class="mb-2">
+                Online Assessment & Evaluation Portal
+            </h6>
+
+            <p class="mb-1">
+                Secure • Fast • Reliable Online Examination System
+            </p>
+
+            <small>
+                © 2026 OAEP. All Rights Reserved.
+            </small>
 
         </div>
+    </footer>
+    <script>
+        function togglePassword() {
+            let pass = document.getElementById("password");
 
-    </div>
-
+            if (pass.type === "password") {
+                pass.type = "text";
+            } else {
+                pass.type = "password";
+            }
+        }
+    </script>
 </body>
 
 </html>

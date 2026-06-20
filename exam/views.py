@@ -121,7 +121,7 @@ def StudentRegister(request):
             mobile_no = mobno
         )
         
-        return render(request, 'students/login.html', {'msg':'Student Logged IN Successfully !!!'})
+        return render(request, 'students/login.html', {'msg':'Student Register Successfully !!!'})
     
 def StudentLoginPage(request):
     return render(request, 'students/login.html')
