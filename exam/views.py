@@ -165,11 +165,7 @@ def AdminPage(request):
         'recent_results': Result.objects.order_by('-id')[:5]
     }
 
-    return render(
-        request,
-        'admin/admindashboard.html',
-        context
-    )
+    return render(request, 'admin/admindashboard.html', context)
 
 def SubjectPage(request):
 
