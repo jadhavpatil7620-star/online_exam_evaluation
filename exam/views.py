@@ -168,18 +168,8 @@ def AdminPage(request):
     return render(request, 'admin/admindashboard.html', context)
 
 def SubjectPage(request):
-
-    subjectdb = Question.objects.values(
-        'sub_name'
-    ).distinct()
-
-    return render(
-        request,
-        'subjects/subjectpage.html',
-        {
-            'subjectdb': subjectdb
-        }
-    )
+    subjectdb = Question.objects.values('sub_name').distinct()
+    return render(request, 'subjects/subjectpage.html',{'subjectdb': subjectdb})
     
 def DeleteStudentPage(request):
     return render(request, 'students/deletestudent.html')
